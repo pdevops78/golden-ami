@@ -1,3 +1,4 @@
+# create an instance with default ami
 resource "aws_instance" "instance" {
   ami                    = data.aws_ami.ami.image_id
   instance_type          = "t3.micro"
@@ -8,7 +9,6 @@ resource "aws_instance" "instance" {
 }
 
 # create a provisioner to run ansible commands
-
 resource "null_resource" "ansible" {
     connection {
         type         =  "ssh"
@@ -25,7 +25,6 @@ resource "null_resource" "ansible" {
 }
 
 # create an image from running instances
-
 resource "aws_ami_from_instance" "ami-instance-image" {
   depends_on         = [null_resource.ansible]
   name               = "golden-ami${formatdate("DD MMM YYYY hh:mm ZZZ",timestamp())}"
@@ -35,5 +34,5 @@ resource "aws_ami_from_instance" "ami-instance-image" {
           name
           }
 #       lifecycle: to stop everytime creating name based on timestamp
-      }
+  }
 }
