@@ -28,6 +28,6 @@ resource "null_resource" "ansible" {
 
 resource "aws_ami_from_instance" "ami-instance-image" {
   depends_on         = [null_resource.ansible]
-  name               = "golden-ami"
+  name               = "golden-ami${formatdate("DD MMM YYYY hh:mm ZZZ",timestamp())}"
   source_instance_id = aws_instance.instance.id
 }
