@@ -9,7 +9,7 @@ resource "aws_instance" "instance" {
 
 # create a provisioner to run ansible commands
 
-resource "null_resource" "provisioner" {
+resource "null_resource" "ansible" {
     connection {
         type         =  "ssh"
         user         =  "ec2-user"
@@ -24,8 +24,10 @@ resource "null_resource" "provisioner" {
   }
 }
 
-# # create an image from running instances
-# resource "aws_ami_from_instance" "ami-instance-image" {
-#   name               = "golden-ami"
-#   source_instance_id = aws_instance.instance.id
-# }
+# create an image from running instances
+
+resource "aws_ami_from_instance" "ami-instance-image" {
+  depends_on         = [null_resource.ansible]
+  name               = "golden-ami"
+  source_instance_id = aws_instance.instance.id
+}
